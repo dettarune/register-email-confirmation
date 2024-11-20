@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
+            <h3 class="text-center mb-4">Verify Token</h3>
+            <form id="verificationForm">
+                <div class="mb-3">
+                    <label for="verifyToken" class="form-label">Verification Token</label>
+                    <input type="text" class="form-control" id="verifyToken" placeholder="Enter your verification token" required>
+                </div>
+                <button type="submit" class="btn btn-success w-100">Verify</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        const BASE_URL = 'http://localhost:3000';
+
+        document.getElementById('verificationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const token = document.getElementById('verifyToken').value;
+
+            try {
+                const response = await fetch(`${BASE_URL}/verification`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token }),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert('Verification successful! You can now log in.');
+                } else {
+                    alert(`Error: ${data.message}`);
+                }
+            } catch (error) {
+                alert('Failed to verify token. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
