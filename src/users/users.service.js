@@ -119,13 +119,6 @@ const login = async (req) => {
         throw new ResponseError(404, `Username atau password salah!`);
     }
 
-    // const token = jwt.sign(
-    //     { username: findUser.username },
-    //     process.env.JWT_SECRET_KEY,
-    //     { expiresIn: '1h' }
-    // );
-
-    // return { token, username: findUser.username };
 }
 
 export default {

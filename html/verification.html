@@ -3,45 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verification</title>
+    <title>Verify Account</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .loading {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+    </style>
 </head>
 <body class="bg-light">
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
-            <h3 class="text-center mb-4">Verify Token</h3>
+            <h3 class="text-center mb-4">Verify Your Account</h3>
             <form id="verificationForm">
                 <div class="mb-3">
                     <label for="verifyToken" class="form-label">Verification Token</label>
                     <input type="text" class="form-control" id="verifyToken" placeholder="Enter your verification token" required>
                 </div>
-                <button type="submit" class="btn btn-success w-100">Verify</button>
+                <button type="submit" class="btn btn-success w-100" id="verifyButton">Verify</button>
             </form>
         </div>
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        const BASE_URL = 'http://localhost:3000';
+        const BASE_URL = 'http://localhost:2024'; 
 
         document.getElementById('verificationForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const token = document.getElementById('verifyToken').value;
+
+            const token = document.getElementById('verifyToken').value.trim();
+            if (!token) {
+                alert('Please enter a verification token.');
+                return;
+            }
+
+            const verifyButton = document.getElementById('verifyButton');
+            verifyButton.classList.add('loading');
+            verifyButton.disabled = true;
+            verifyButton.innerHTML = 'Waiting...';
 
             try {
-                const response = await fetch(`${BASE_URL}/verification`, {
+                const response = await fetch(`${BASE_URL}/api/users/verify`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ token: token }), 
                 });
 
                 const data = await response.json();
+
                 if (response.ok) {
-                    alert('Verification successful! You can now log in.');
+                    alert(`Success: ${data.message}`);
+                    window.location.href = 'login.html'; 
                 } else {
-                    alert(`Error: ${data.message}`);
+                    alert(`Error: ${data.message || 'Something went wrong, please try again.'}`);
                 }
             } catch (error) {
-                alert('Failed to verify token. Please try again.');
+                console.error('Fetch error:', error);
+                alert('Failed to verify token. Please try again later.');
+            } finally {
+                verifyButton.classList.remove('loading');
+                verifyButton.disabled = false;
+                verifyButton.innerHTML = 'Verify';
             }
         });
     </script>

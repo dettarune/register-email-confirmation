@@ -15,7 +15,7 @@ const register = async(req, res, next) => {
 
 const verify = async(req, res, next) => {
     try {
-                const token = req.body.token
+        const token = req.body.token
         const result = await userService.verification(token)
         res.status(200).json({
             message: "Akun Anda berhasil diverifikasi!",
