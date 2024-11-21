@@ -43,7 +43,7 @@
                 if (response.ok) {
                     alert('Login successful!');
                 } else {
-                    alert(`Error: ${data.message}`);
+                    alert(`${data.errrors}`);
                 }
             } catch (error) {
                 alert('Failed to log in. Please try again.');
