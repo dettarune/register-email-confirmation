@@ -60,7 +60,7 @@
                     alert(`Check Email bg, buat verifikasi`);
                     window.location.href = 'verification.html';
                 } else {
-                    alert(`Error: ${data.error}`);
+                    alert(`Error: ${data.errors}`);
                     registerButton.classList.remove('loading');
                     registerButton.disabled = false;
                     registerButton.innerHTML = 'Register';
