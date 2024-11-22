@@ -37,8 +37,25 @@ const login = async(req, res, next) => {
     }
 }
 
+const getUserById = async(req, res, next) => {
+    try {
+
+        const userID = req.params.userID
+        console.log('Request Params:', req.params);
+        const result = await userService.getUserById(userID)
+        console.log(`\nMengambil data......`)
+        console.log(result)
+        res.status(200).json({
+            data: result
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 export default {
     register,
     verify,
-    login
+    login,
+    getUserById
 }

@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 import { prisma } from '../route/database.js'
 import { ResponseError } from '../middleware/response-error.js'
-import { loginUserValidation, registerUserValidation, tokenValidation, validate } from './users.validation.js'
+import { getUserByIdValidation, loginUserValidation, registerUserValidation, tokenValidation, validate } from './users.validation.js'
 import { v4 as uuidv4 } from 'uuid'
 import nodemailer from 'nodemailer'
 import jwt from 'jsonwebtoken'
@@ -42,6 +42,10 @@ const register = async (req) => {
 
     if (isAvailable > 0) {
         throw new ResponseError(404, `Username ${user.username} telah dipakai orang lain.`);
+    }
+
+    if (user.password.length < 8) {
+        throw new ResponseError(404, `Password tidak boleh kurang dari 8 karakter`);
     }
 
     const token = uuidv4();
@@ -121,8 +125,31 @@ const login = async (req) => {
 
 }
 
+const getUserById = async (req) => {
+    const userID = validate(getUserByIdValidation, req)
+    
+    const user = await prisma.user.findFirst({
+        where: {
+            id: userID
+        },
+        select: {
+            id: true,
+            username: true,
+            email: true,
+            password: true,
+        }
+    })
+
+    if(!user){
+        throw new ResponseError(404, `Account Not Found`)
+    }
+
+    return user
+}
+
 export default {
     register,
     verification,
-    login
+    login,
+    getUserById
 }

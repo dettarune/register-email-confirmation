@@ -24,6 +24,7 @@ const loginUserValidation = Joi.object({
 })
 
 const tokenValidation = Joi.required()
+const getUserByIdValidation = Joi.number().required()
     
 const logoutValidation = Joi.object({
     username: Joi.string().max(100).required()
@@ -33,5 +34,6 @@ export {
     registerUserValidation,
     loginUserValidation,
     validate,
-    tokenValidation
+    tokenValidation,
+    getUserByIdValidation
 }
