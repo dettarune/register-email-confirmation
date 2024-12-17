@@ -13,13 +13,11 @@ const sendToken = async (user, token) => {
             port: 587,
             secure: false,
             auth: {
-                user: "learnbygoogling@gmail.com",
-                pass: "rnic edih qzsr ntln",
+                
             },
         });
         console.log(`"Verifikasi" Code : ${token}`)
         await transporter.sendMail({
-            from: 'learnbygoogling@gmail.com',
             to: user.email, 
             subject: `Hello ${user.username}, this is your verification code`,
             text: "Verification Code : " + token,
